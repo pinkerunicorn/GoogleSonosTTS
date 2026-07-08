@@ -85,12 +85,12 @@
         {
             "type": "Button",
             "caption": "Test Sprachausgabe",
-            "onClick": "SGTTS_PlayMessage($id, $TestText);"
+            "onClick": "GSTTS_PlayMessage($id, $TestText);"
         },
         {
             "type": "Button",
             "caption": "Cache komplett leeren",
-            "onClick": "SGTTS_ClearCache($id);"
+            "onClick": "GSTTS_ClearCache($id);"
         }
     ]
 }
