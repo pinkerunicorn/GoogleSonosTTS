@@ -17,6 +17,7 @@ class GoogleSonosTTS extends IPSModule
         $this->RegisterPropertyFloat("SpeakingRate", 1.0);
         $this->RegisterPropertyFloat("Pitch", 0.0);
         $this->RegisterPropertyString("SonosInstances", "[]");
+        $this->RegisterPropertyString("RoonInstances", "[]");
 
         // Register Timer in Create (interval 0 disables it initially)
         $this->RegisterTimer("CleanupTimer", 0, 'GSTTS_CleanupCache($_IPS[\'TARGET\']);');
@@ -143,6 +144,24 @@ class GoogleSonosTTS extends IPSModule
                 }
                 if ($id > 0 && !isset($allSonosIDs[$id])) {
                     $allSonosIDs[$id] = $vol;
+                }
+            }
+        }
+        
+        $roonList = json_decode($this->ReadPropertyString("RoonInstances"), true);
+        if (is_array($roonList)) {
+            foreach ($roonList as $item) {
+                $isActive = isset($item['Active']) ? (bool)$item['Active'] : true;
+                if (!$isActive) continue;
+
+                $roonID = (int)($item['InstanceID'] ?? 0);
+                if ($roonID > 0 && IPS_InstanceExists($roonID)) {
+                    $this->SendDebug("GoogleTTS", "Pausiere Roon Instanz: " . $roonID, 0);
+                    if (function_exists('ROON_SendCommand')) {
+                        ROON_SendCommand($roonID, 'pause');
+                    } else {
+                        $this->SendDebug("GoogleTTS", "ROON_SendCommand nicht gefunden, kann Roon nicht pausieren.", 0);
+                    }
                 }
             }
         }
