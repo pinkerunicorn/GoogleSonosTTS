@@ -189,6 +189,11 @@ class GoogleSonosTTS extends IPSModule
             }
         }
 
+        // Wenn wir Roon pausiert haben, warten wir 2 Sekunden, bevor wir mit der Sprachausgabe starten
+        if (count($roonResumeList) > 0) {
+            IPS_Sleep(2000);
+        }
+
         $speakingRate = $this->ReadPropertyFloat("SpeakingRate");
         $pitch = $this->ReadPropertyFloat("Pitch");
 
