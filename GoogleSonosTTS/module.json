@@ -3,6 +3,7 @@
     "name": "GoogleSonosTTS",
     "type": 3,
     "vendor": "SmartHome",
+    "url": "https://github.com/pinkerunicorn/GoogleSonosTTS",
     "aliases": ["GoogleSonosTTS"],
     "parentRequirements": [],
     "childRequirements": [],

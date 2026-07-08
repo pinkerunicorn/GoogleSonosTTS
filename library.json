@@ -1,8 +1,8 @@
 {
     "id": "{F3B4BCA1-9A3D-4A2D-BE48-D4D04C2932F2}",
     "name": "GoogleSonosTTS",
-    "author": "Antigravity",
-    "url": "",
+    "author": "Florian Graßinger",
+    "url": "https://github.com/pinkerunicorn/GoogleSonosTTS",
     "compatibility": {
         "version": "7.0"
     },
