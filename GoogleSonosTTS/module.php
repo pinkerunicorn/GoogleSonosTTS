@@ -189,9 +189,9 @@ class GoogleSonosTTS extends IPSModule
             }
         }
 
-        // Wenn wir Roon pausiert haben, warten wir 2 Sekunden, bevor wir mit der Sprachausgabe starten
+        // Wenn wir Roon pausiert haben, warten wir 1 Sekunde, bevor wir mit der Sprachausgabe starten
         if (count($roonResumeList) > 0) {
-            IPS_Sleep(2000);
+            IPS_Sleep(1000);
         }
 
         $speakingRate = $this->ReadPropertyFloat("SpeakingRate");
@@ -305,8 +305,8 @@ class GoogleSonosTTS extends IPSModule
         // Set Timer to resume Roon if needed
         if (count($roonResumeList) > 0) {
             $this->SetBuffer('RoonResumeIDs', json_encode($roonResumeList));
-            // Calculate approximate duration: 32kbps MP3 (roughly 4000 bytes/sec), add 2.5s overhead
-            $durationMs = (int)(max(2, (filesize($filePath) / 4000) + 2.5) * 1000);
+            // Calculate approximate duration: 32kbps MP3 (roughly 4000 bytes/sec), add 1.0s overhead
+            $durationMs = (int)(max(2, (filesize($filePath) / 4000) + 1.0) * 1000);
             $this->SetTimerInterval('ResumeRoonTimer', $durationMs);
             $this->SendDebug("GoogleTTS", "Starte ResumeRoonTimer in " . $durationMs . " ms", 0);
         }
