@@ -33,9 +33,18 @@
             "changeOrder": true,
             "columns": [
                 {
+                    "caption": "Aktiv",
+                    "name": "Active",
+                    "width": "80px",
+                    "add": true,
+                    "edit": {
+                        "type": "CheckBox"
+                    }
+                },
+                {
                     "caption": "Instanz",
                     "name": "InstanceID",
-                    "width": "150px",
+                    "width": "350px",
                     "add": 0,
                     "edit": {
                         "type": "SelectInstance"

@@ -133,6 +133,9 @@ class GoogleSonosTTS extends IPSModule
         $sonosList = json_decode($this->ReadPropertyString("SonosInstances"), true);
         if (is_array($sonosList)) {
             foreach ($sonosList as $item) {
+                $isActive = isset($item['Active']) ? (bool)$item['Active'] : true;
+                if (!$isActive) continue;
+
                 $id = (int)($item['InstanceID'] ?? 0);
                 $vol = $item['Volume'] ?? "+0";
                 if ($vol === "") {
@@ -148,12 +151,16 @@ class GoogleSonosTTS extends IPSModule
         $pitch = $this->ReadPropertyFloat("Pitch");
 
         if (empty($apiKey)) {
-            echo "Fehler: Google Cloud API Key ist nicht konfiguriert.";
+            $err = "Fehler: Google Cloud API Key ist nicht konfiguriert.";
+            echo $err;
+            $this->LogMessage($err, KL_ERROR);
             return false;
         }
 
         if (count($allSonosIDs) === 0) {
-            echo "Fehler: Keine gueltigen Sonos Ziel-Instanzen konfiguriert.";
+            $err = "Fehler: Keine aktiven Sonos Ziel-Instanzen konfiguriert.";
+            echo $err;
+            $this->LogMessage($err, KL_ERROR);
             return false;
         }
 
@@ -166,7 +173,9 @@ class GoogleSonosTTS extends IPSModule
         
         if (!is_dir($moduleDir)) {
             if (!mkdir($moduleDir, 0777, true)) {
-                echo "Fehler: Konnte Verzeichnis nicht erstellen: " . $moduleDir;
+                $err = "Fehler: Konnte Verzeichnis nicht erstellen: " . $moduleDir;
+                echo $err;
+                $this->LogMessage($err, KL_ERROR);
                 return false;
             }
         }
@@ -214,13 +223,17 @@ class GoogleSonosTTS extends IPSModule
             $this->SendDebug("GoogleTTS", "Google API HTTP Code: " . $httpCode, 0);
 
             if ($httpCode !== 200) {
-                echo "Fehler bei der Google TTS API Anfrage. HTTP Code: " . $httpCode . "\nResponse: " . $response;
+                $err = "Fehler bei der Google TTS API Anfrage. HTTP Code: " . $httpCode . "\nResponse: " . $response;
+                echo $err;
+                $this->LogMessage($err, KL_ERROR);
                 return false;
             }
 
             $result = json_decode($response, true);
             if (!isset($result['audioContent'])) {
-                echo "Fehler: Keine Audio-Daten von Google empfangen.";
+                $err = "Fehler: Keine Audio-Daten von Google empfangen.";
+                echo $err;
+                $this->LogMessage($err, KL_ERROR);
                 return false;
             }
 
@@ -230,7 +243,9 @@ class GoogleSonosTTS extends IPSModule
 
             // Write file
             if (file_put_contents($filePath, $audioContent) === false) {
-                echo "Fehler: Konnte MP3-Datei nicht schreiben: " . $filePath;
+                $err = "Fehler: Konnte MP3-Datei nicht schreiben: " . $filePath;
+                echo $err;
+                $this->LogMessage($err, KL_ERROR);
                 return false;
             }
 
@@ -260,7 +275,9 @@ class GoogleSonosTTS extends IPSModule
                 }
             }
         } else {
-            echo "Warnung: Funktion SNS_PlayFiles existiert nicht. Bitte sicherstellen, dass das Sonos Modul korrekt installiert ist.";
+            $err = "Warnung: Funktion SNS_PlayFiles existiert nicht. Bitte sicherstellen, dass das Sonos Modul korrekt installiert ist.";
+            echo $err;
+            $this->LogMessage($err, KL_WARNING);
             return false;
         }
 
