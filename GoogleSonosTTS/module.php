@@ -19,8 +19,9 @@ class GoogleSonosTTS extends IPSModule
         $this->RegisterPropertyString("SonosInstances", "[]");
         $this->RegisterPropertyString("RoonInstances", "[]");
 
-        // Register Timer in Create (interval 0 disables it initially)
+        // Register Timers
         $this->RegisterTimer("CleanupTimer", 0, 'GSTTS_CleanupCache($_IPS[\'TARGET\']);');
+        $this->RegisterTimer("ResumeRoonTimer", 0, 'GSTTS_ResumeRoon($_IPS[\'TARGET\']);');
     }
 
     public function ApplyChanges(): void
@@ -69,6 +70,21 @@ class GoogleSonosTTS extends IPSModule
                 }
             }
         }
+    }
+
+    public function ResumeRoon(): void
+    {
+        $this->SetTimerInterval('ResumeRoonTimer', 0);
+        $resumeList = json_decode($this->GetBuffer('RoonResumeIDs'), true);
+        if (is_array($resumeList)) {
+            foreach ($resumeList as $roonID) {
+                if (IPS_InstanceExists($roonID) && function_exists('ROON_SendCommand')) {
+                    $this->SendDebug("GoogleTTS", "Setze Roon Instanz fort: " . $roonID, 0);
+                    ROON_SendCommand($roonID, 'play');
+                }
+            }
+        }
+        $this->SetBuffer('RoonResumeIDs', '[]');
     }
 
     protected function RegisterHook(string $WebHook): void
@@ -149,6 +165,7 @@ class GoogleSonosTTS extends IPSModule
         }
         
         $roonList = json_decode($this->ReadPropertyString("RoonInstances"), true);
+        $roonResumeList = [];
         if (is_array($roonList)) {
             foreach ($roonList as $item) {
                 $isActive = isset($item['Active']) ? (bool)$item['Active'] : true;
@@ -156,6 +173,12 @@ class GoogleSonosTTS extends IPSModule
 
                 $roonID = (int)($item['InstanceID'] ?? 0);
                 if ($roonID > 0 && IPS_InstanceExists($roonID)) {
+                    // Check if Roon is playing right now
+                    $stateID = @IPS_GetObjectIDByIdent('State', $roonID);
+                    if ($stateID && GetValue($stateID) == 2) { // 2 = Play
+                        $roonResumeList[] = $roonID;
+                    }
+
                     $this->SendDebug("GoogleTTS", "Pausiere Roon Instanz: " . $roonID, 0);
                     if (function_exists('ROON_SendCommand')) {
                         ROON_SendCommand($roonID, 'pause');
@@ -272,6 +295,15 @@ class GoogleSonosTTS extends IPSModule
             chmod($filePath, 0777);
         } else {
             $this->SendDebug("GoogleTTS", "Audio existiert bereits im Cache. Überspringe Google API Anfrage.", 0);
+        }
+
+        // Set Timer to resume Roon if needed
+        if (count($roonResumeList) > 0) {
+            $this->SetBuffer('RoonResumeIDs', json_encode($roonResumeList));
+            // Calculate approximate duration: 32kbps MP3 (roughly 4000 bytes/sec), add 2.5s overhead
+            $durationMs = (int)(max(2, (filesize($filePath) / 4000) + 2.5) * 1000);
+            $this->SetTimerInterval('ResumeRoonTimer', $durationMs);
+            $this->SendDebug("GoogleTTS", "Starte ResumeRoonTimer in " . $durationMs . " ms", 0);
         }
 
         // Construct URL via Webhook
