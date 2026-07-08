@@ -93,7 +93,7 @@ class GoogleSonosTTS extends IPSModule
         }
     }
 
-    protected function ProcessHookData(): void
+    protected function ProcessHookData()
     {
         $uri = $_SERVER['REQUEST_URI'];
         $parts = explode('?', $uri); // Remove query string if any
