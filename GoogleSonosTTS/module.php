@@ -153,14 +153,14 @@ class GoogleSonosTTS extends IPSModule
         if (empty($apiKey)) {
             $err = "Fehler: Google Cloud API Key ist nicht konfiguriert.";
             echo $err;
-            $this->LogMessage($err, KL_ERROR);
+            IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
             return false;
         }
 
         if (count($allSonosIDs) === 0) {
             $err = "Fehler: Keine aktiven Sonos Ziel-Instanzen konfiguriert.";
             echo $err;
-            $this->LogMessage($err, KL_ERROR);
+            IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
             return false;
         }
 
@@ -175,7 +175,7 @@ class GoogleSonosTTS extends IPSModule
             if (!mkdir($moduleDir, 0777, true)) {
                 $err = "Fehler: Konnte Verzeichnis nicht erstellen: " . $moduleDir;
                 echo $err;
-                $this->LogMessage($err, KL_ERROR);
+                IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
                 return false;
             }
         }
@@ -225,7 +225,7 @@ class GoogleSonosTTS extends IPSModule
             if ($httpCode !== 200) {
                 $err = "Fehler bei der Google TTS API Anfrage. HTTP Code: " . $httpCode . "\nResponse: " . $response;
                 echo $err;
-                $this->LogMessage($err, KL_ERROR);
+                IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
                 return false;
             }
 
@@ -233,7 +233,7 @@ class GoogleSonosTTS extends IPSModule
             if (!isset($result['audioContent'])) {
                 $err = "Fehler: Keine Audio-Daten von Google empfangen.";
                 echo $err;
-                $this->LogMessage($err, KL_ERROR);
+                IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
                 return false;
             }
 
@@ -245,7 +245,7 @@ class GoogleSonosTTS extends IPSModule
             if (file_put_contents($filePath, $audioContent) === false) {
                 $err = "Fehler: Konnte MP3-Datei nicht schreiben: " . $filePath;
                 echo $err;
-                $this->LogMessage($err, KL_ERROR);
+                IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
                 return false;
             }
 
@@ -277,10 +277,11 @@ class GoogleSonosTTS extends IPSModule
         } else {
             $err = "Warnung: Funktion SNS_PlayFiles existiert nicht. Bitte sicherstellen, dass das Sonos Modul korrekt installiert ist.";
             echo $err;
-            $this->LogMessage($err, KL_WARNING);
+            IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | ' . $err);
             return false;
         }
 
+        IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS | Sprachausgabe erfolgreich gestartet: ' . $Text);
         return $fileURL;
     }
 }
