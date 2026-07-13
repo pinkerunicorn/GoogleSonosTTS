@@ -514,7 +514,8 @@ class GoogleSonosTTS extends IPSModuleStrict
         {
             "type": "Button",
             "caption": "Test Sprachausgabe",
-            "onClick": "GSTTS_PlayMessage($id, $TestText);"
+            "onClick": "GSTTS_PlayMessage($id, $TestText);",
+            "icon": "Stop"
         },
         {
             "type": "Button",
