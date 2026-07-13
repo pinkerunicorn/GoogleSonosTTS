@@ -174,8 +174,12 @@ class GoogleSonosTTS extends IPSModule
                 $roonID = (int)($item['InstanceID'] ?? 0);
                 if ($roonID > 0 && IPS_InstanceExists($roonID)) {
                     // Check if Roon is playing right now
-                    $stateID = @IPS_GetObjectIDByIdent('State', $roonID);
-                    if ($stateID && GetValue($stateID) == 2) { // 2 = Play
+                    $stateID = false;
+                    try {
+                        $stateID = IPS_GetObjectIDByIdent('State', $roonID);
+                    } catch (Exception $e) {}
+                    
+                    if ($stateID !== false && GetValue($stateID) == 2) { // 2 = Play
                         $roonResumeList[] = $roonID;
                     }
 

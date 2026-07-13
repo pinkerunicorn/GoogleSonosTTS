@@ -3,10 +3,13 @@
     "name": "GoogleSonosTTS",
     "type": 3,
     "vendor": "SmartHome",
-    "url": "https://github.com/pinkerunicorn/GoogleSonosTTS",
-    "aliases": ["GoogleSonosTTS"],
+    "url": "https://github.com/pinkerunicorn/",
+    "aliases": [
+        "GoogleSonosTTS"
+    ],
     "parentRequirements": [],
     "childRequirements": [],
     "implemented": [],
-    "prefix": "GSTTS"
+    "prefix": "GSTTS",
+    "author": "Florian Graßinger"
 }
