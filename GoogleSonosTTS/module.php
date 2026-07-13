@@ -345,9 +345,10 @@ class GoogleSonosTTS extends IPSModule
         return $fileURL;
     }
 
-    protected function LogMessage($Message, $KL_MESSAGE = KL_MESSAGE)
+    protected function LogMessage(string $Message, int $Type): bool
     {
         IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS: ' . $Message);
+        return true;
     }
 }
 
