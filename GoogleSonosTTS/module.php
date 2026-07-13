@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-class GoogleSonosTTS extends IPSModule
+class GoogleSonosTTS extends IPSModuleStrict
 {
-    public function Create(): void
-    {
+    public function Create(): void{
         // Never delete this line!
         parent::Create();
 
@@ -24,8 +23,7 @@ class GoogleSonosTTS extends IPSModule
         $this->RegisterTimer("ResumeRoonTimer", 0, 'GSTTS_ResumeRoon($_IPS[\'TARGET\']);');
     }
 
-    public function ApplyChanges(): void
-    {
+    public function ApplyChanges(): void{
         // Never delete this line!
         parent::ApplyChanges();
 
@@ -87,30 +85,31 @@ class GoogleSonosTTS extends IPSModule
         $this->SetBuffer('RoonResumeIDs', '[]');
     }
 
-    protected function RegisterHook(string $WebHook): void
+    protected function RegisterHook(string $HookPath): bool
     {
         $ids = IPS_GetInstanceListByModuleID("{015A6EB8-D6E5-4B93-B496-0D3F77AE9FE1}");
         if (sizeof($ids) > 0) {
             $hooks = json_decode(IPS_GetProperty($ids[0], "Hooks"), true);
             $found = false;
             foreach ($hooks as $index => $hook) {
-                if ($hook['Hook'] == $WebHook) {
+                if ($hook['Hook'] == $HookPath) {
                     if ($hook['TargetID'] == $this->InstanceID) {
-                        return;
+                        return true;
                     }
                     $hooks[$index]['TargetID'] = $this->InstanceID;
                     $found = true;
                 }
             }
             if (!$found) {
-                $hooks[] = ["Hook" => $WebHook, "TargetID" => $this->InstanceID];
+                $hooks[] = ["Hook" => $HookPath, "TargetID" => $this->InstanceID];
             }
             IPS_SetProperty($ids[0], "Hooks", json_encode($hooks));
             IPS_ApplyChanges($ids[0]);
         }
+        return true;
     }
 
-    protected function ProcessHookData()
+    protected function ProcessHookData(): string
     {
         $uri = $_SERVER['REQUEST_URI'];
         $parts = explode('?', $uri); // Remove query string if any
@@ -119,8 +118,7 @@ class GoogleSonosTTS extends IPSModule
 
         if ($file === '' || strpos($file, '.mp3') === false) {
             http_response_code(400);
-            echo "No valid file specified";
-            return;
+            return "No valid file specified";
         }
 
         $userDir = IPS_GetKernelDir() . "webfront" . DIRECTORY_SEPARATOR . "user" . DIRECTORY_SEPARATOR;
@@ -132,9 +130,10 @@ class GoogleSonosTTS extends IPSModule
             header("Content-Length: " . filesize($filePath));
             header("Accept-Ranges: bytes");
             readfile($filePath);
+            return "";
         } else {
             http_response_code(404);
-            echo "File not found";
+            return "File not found";
         }
     }
 
@@ -345,9 +344,10 @@ class GoogleSonosTTS extends IPSModule
         return $fileURL;
     }
 
-    protected function LogMessage($Message, $Type)
+    protected function LogMessage(string $Message, int $Type): bool
     {
         IPS_LogMessage('SmartVillaKunterbunt', 'GoogleSonosTTS: ' . $Message);
+        return true;
     }
 }
 
