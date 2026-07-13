@@ -109,7 +109,7 @@ class GoogleSonosTTS extends IPSModuleStrict
         return true;
     }
 
-    protected function ProcessHookData(): string
+    protected function ProcessHookData(): void
     {
         $uri = $_SERVER['REQUEST_URI'];
         $parts = explode('?', $uri); // Remove query string if any
@@ -118,7 +118,8 @@ class GoogleSonosTTS extends IPSModuleStrict
 
         if ($file === '' || strpos($file, '.mp3') === false) {
             http_response_code(400);
-            return "No valid file specified";
+            echo "No valid file specified";
+            return;
         }
 
         $userDir = IPS_GetKernelDir() . "webfront" . DIRECTORY_SEPARATOR . "user" . DIRECTORY_SEPARATOR;
@@ -130,10 +131,11 @@ class GoogleSonosTTS extends IPSModuleStrict
             header("Content-Length: " . filesize($filePath));
             header("Accept-Ranges: bytes");
             readfile($filePath);
-            return "";
+            return;
         } else {
             http_response_code(404);
-            return "File not found";
+            echo "File not found";
+            return;
         }
     }
 
