@@ -1,12 +1,12 @@
 {
-    "id":  "{F3B4BCA1-9A3D-4A2D-BE48-D4D04C2932F2}",
-    "name":  "GoogleSonosTTS",
-    "author":  "Florian GraÃŸinger",
-    "url":  "https://github.com/pinkerunicorn/",
-    "compatibility":  {
-                          "version":  "7.0"
-                      },
-    "version":  "1.0",
-    "build":  1,
-    "date":  1688810099
+    "id": "{F3B4BCA1-9A3D-4A2D-BE48-D4D04C2932F2}",
+    "name": "GoogleSonosTTS",
+    "author": "Florian Graßinger",
+    "url": "https://github.com/pinkerunicorn/",
+    "compatibility": {
+        "version": "7.0"
+    },
+    "version": "1.0",
+    "build": 1,
+    "date": 1688810099
 }
