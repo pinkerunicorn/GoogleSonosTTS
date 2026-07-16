@@ -1,15 +1,21 @@
 {
-    "id": "{A1B2C3D4-E5F6-7890-ABCD-123456789012}",
-    "name": "GoogleSonosTTS",
-    "type": 3,
-    "vendor": "SmartHome",
-    "url": "https://github.com/pinkerunicorn/",
-    "aliases": [
-        "GoogleSonosTTS"
-    ],
-    "parentRequirements": [],
-    "childRequirements": [],
-    "implemented": [],
-    "prefix": "GSTTS",
-    "author": "Florian Graßinger"
+    "id":  "{A1B2C3D4-E5F6-7890-ABCD-123456789012}",
+    "name":  "GoogleSonosTTS",
+    "type":  3,
+    "vendor":  "SmartHome",
+    "url":  "https://github.com/pinkerunicorn/",
+    "aliases":  [
+                    "GoogleSonosTTS"
+                ],
+    "parentRequirements":  [
+
+                           ],
+    "childRequirements":  [
+
+                          ],
+    "implemented":  [
+
+                    ],
+    "prefix":  "GSTTS",
+    "author":  "Florian GraÃŸinger"
 }
