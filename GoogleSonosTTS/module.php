@@ -26,6 +26,29 @@ class GoogleSonosTTS extends IPSModuleStrict
     public function ApplyChanges(): void{
         // Never delete this line!
         parent::ApplyChanges();
+        // --- Auto-generated References ---
+        foreach ($this->GetReferenceList() as $refID) {
+            $this->UnregisterReference($refID);
+        }
+        $list_SonosInstances = json_decode($this->ReadPropertyString('SonosInstances'), true);
+        if (is_array($list_SonosInstances)) {
+            foreach ($list_SonosInstances as $item) {
+                $vid = $item['InstanceID'] ?? 0;
+                if ($vid > 1 && @IPS_ObjectExists($vid)) {
+                    $this->RegisterReference($vid);
+                }
+            }
+        }
+        $list_RoonInstances = json_decode($this->ReadPropertyString('RoonInstances'), true);
+        if (is_array($list_RoonInstances)) {
+            foreach ($list_RoonInstances as $item) {
+                $vid = $item['InstanceID'] ?? 0;
+                if ($vid > 1 && @IPS_ObjectExists($vid)) {
+                    $this->RegisterReference($vid);
+                }
+            }
+        }
+        // ---------------------------------
 
         $this->RegisterHook("/hook/GoogleSonosTTS_" . $this->InstanceID);
 
