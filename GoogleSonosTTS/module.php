@@ -381,9 +381,17 @@ class GoogleSonosTTS extends IPSModuleStrict
 {
     "elements": [
         {
+            "type": "Label",
+            "caption": "Hier trägst du deinen Google Cloud API Key ein. Diesen benötigst du, um auf den Text-to-Speech Service von Google zuzugreifen."
+        },
+        {
             "type": "PasswordTextBox",
             "name": "ApiKey",
             "caption": "Google Cloud API Key"
+        },
+        {
+            "type": "Label",
+            "caption": "Wähle hier die Sprache und Stimme aus, mit der deine Nachrichten vorgelesen werden sollen."
         },
         {
             "type": "Select",
@@ -441,6 +449,10 @@ class GoogleSonosTTS extends IPSModuleStrict
             ]
         },
         {
+            "type": "Label",
+            "caption": "Hier trägst du deine Sonos Systeme ein, auf denen die Sprachausgabe erfolgen soll. Du kannst auch die Lautstärke pro Gerät anpassen."
+        },
+        {
             "type": "List",
             "name": "SonosInstances",
             "caption": "Sonos Systeme",
@@ -460,7 +472,7 @@ class GoogleSonosTTS extends IPSModuleStrict
                 {
                     "caption": "Instanz",
                     "name": "InstanceID",
-                    "width": "350px",
+                    "width": "auto",
                     "add": 0,
                     "edit": {
                         "type": "SelectInstance"
@@ -476,6 +488,10 @@ class GoogleSonosTTS extends IPSModuleStrict
                     }
                 }
             ]
+        },
+        {
+            "type": "Label",
+            "caption": "Wenn du Roon Systeme nutzt, kannst du sie hier hinzufügen. Sie werden dann während der Ansage automatisch pausiert."
         },
         {
             "type": "List",
@@ -496,7 +512,7 @@ class GoogleSonosTTS extends IPSModuleStrict
                 {
                     "caption": "Instanz",
                     "name": "InstanceID",
-                    "width": "350px",
+                    "width": "auto",
                     "add": 0,
                     "edit": {
                         "type": "SelectInstance"
@@ -505,10 +521,18 @@ class GoogleSonosTTS extends IPSModuleStrict
             ]
         },
         {
+            "type": "Label",
+            "caption": "Damit die Sonos Boxen die erzeugte Audiodatei abrufen können, gib hier die Basis-URL deines IP-Symcon Servers an (z.B. http://192.168.1.100:3777)."
+        },
+        {
             "type": "ValidationTextBox",
             "name": "SymconBaseURL",
             "caption": "IP-Symcon Base URL (z.B. http://192.168.1.100:3777)",
             "validate": "^https?://.+"
+        },
+        {
+            "type": "Label",
+            "caption": "Hier stellst du die Sprechgeschwindigkeit und die Tonhöhe ein, falls du die Stimme anpassen möchtest."
         },
         {
             "type": "NumberSpinner",
