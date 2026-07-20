@@ -290,8 +290,14 @@ class GoogleSonosTTS extends IPSModuleStrict
             curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($ch, CURLOPT_TIMEOUT, 15);
 
             $response = curl_exec($ch);
+            if ($response === false) {
+                $this->SLog('ERROR', 'API-Anfrage fehlgeschlagen', curl_error($ch));
+                curl_close($ch);
+                return false;
+            }
             $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
