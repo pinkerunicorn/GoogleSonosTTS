@@ -250,7 +250,7 @@ class GoogleSonosTTS extends IPSModuleStrict
             if (!mkdir($moduleDir, 0777, true)) {
                 $err = "Fehler: Konnte Verzeichnis nicht erstellen: " . $moduleDir;
                 echo $err;
-                $this->SLog('ERROR', $err);
+                $this->SLog('ERROR', 'Verzeichnis-Erstellung fehlgeschlagen', 'Pfad: ' . $moduleDir);
                 return false;
             }
         }
@@ -306,7 +306,7 @@ class GoogleSonosTTS extends IPSModuleStrict
             if ($httpCode !== 200) {
                 $err = "Fehler bei der Google TTS API Anfrage. HTTP Code: " . $httpCode . "\nResponse: " . $response;
                 echo $err;
-                $this->SLog('ERROR', $err);
+                $this->SLog('ERROR', 'Google TTS API Fehler', 'HTTP Code: ' . $httpCode . ' | Response: ' . $response);
                 return false;
             }
 
@@ -314,7 +314,7 @@ class GoogleSonosTTS extends IPSModuleStrict
             if (!isset($result['audioContent'])) {
                 $err = "Fehler: Keine Audio-Daten von Google empfangen.";
                 echo $err;
-                $this->SLog('ERROR', $err);
+                $this->SLog('ERROR', 'Keine Audio-Daten empfangen', 'Response: ' . $response);
                 return false;
             }
 
@@ -326,7 +326,7 @@ class GoogleSonosTTS extends IPSModuleStrict
             if (file_put_contents($filePath, $audioContent) === false) {
                 $err = "Fehler: Konnte MP3-Datei nicht schreiben: " . $filePath;
                 echo $err;
-                $this->SLog('ERROR', $err);
+                $this->SLog('ERROR', 'Datei konnte nicht geschrieben werden', 'Pfad: ' . $filePath);
                 return false;
             }
 
